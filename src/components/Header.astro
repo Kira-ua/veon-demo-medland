@@ -1,0 +1,152 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { contacts } from "../data/site";
+
+const nav = [
+  { href: "#napryamy", label: "Каталог" },
+  { href: "#pidbir", label: "Підбір" },
+  { href: "#umovy", label: "Оплата і доставка" },
+  { href: "#kontakty", label: "Контакти" },
+];
+---
+<header class="site-header" data-rec="W-R004,W-R007,W-R009,W-R011">
+  <div class="container site-header__row">
+    <a class="brand" href="#top" aria-label="MedLand, медичне обладнання, Одеса: на початок сторінки">
+      <Logo height={40} class="brand__logo brand__logo--s" />
+      <Logo height={52} class="brand__logo brand__logo--l" />
+      <span class="brand__desc" aria-hidden="true"><span>Медичне обладнання</span><span>Одеса</span></span>
+    </a>
+
+    <nav class="site-nav" aria-label="Головне меню">
+      <ul>
+        {nav.map((n) => <li><a href={n.href} data-nav>{n.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-header__tools">
+      <FutureLink class="search-soon"><Icon name="search" /><span class="visually-hidden">Пошук</span></FutureLink>
+      <a class="req-count" href="#pidbir" data-req-count hidden>Запит <span class="req-count__n tnum" data-req-n>0</span></a>
+      <a class="phone-text tnum" href={contacts.phoneHref}>{contacts.phoneText}</a>
+      <a class="icon-btn hide-s" href={contacts.telegram} aria-label="Написати в Telegram"><Icon name="telegram" /></a>
+      <a class="icon-btn hide-s" href={contacts.viber} aria-label="Написати у Viber"><Icon name="viber" /></a>
+      <a class="icon-btn call-s" href={contacts.phoneHref} aria-label={`Подзвонити: ${contacts.phoneText}`}><Icon name="phone" /></a>
+      <button class="menu-btn btn" type="button" popovertarget="mobile-menu" aria-controls="mobile-menu">
+        <Icon name="menu" /><span>Меню</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="mobile-menu" popover>
+    <div class="mobile-menu__head container">
+      <span class="mobile-menu__title">Меню</span>
+      <button class="btn" type="button" popovertarget="mobile-menu" popovertargetaction="hide">
+        <Icon name="close" /><span>Закрити</span>
+      </button>
+    </div>
+    <nav class="container" aria-label="Меню сторінки">
+      <ul class="mobile-menu__nav">
+        {nav.map((n) => <li><a href={n.href} data-menu-link>{n.label}</a></li>)}
+      </ul>
+      <ul class="mobile-menu__contacts">
+        <li><a class="btn btn--primary" href={contacts.phoneHref}><Icon name="phone" /><span class="tnum">{contacts.phoneText}</span></a></li>
+        <li><a class="btn" href={contacts.telegram}><Icon name="telegram" />Telegram</a></li>
+        <li><a class="btn" href={contacts.viber}><Icon name="viber" />Viber</a></li>
+        <li><a class="btn" href={contacts.emailHref}><Icon name="mail" />E-mail</a></li>
+      </ul>
+      <p class="mobile-menu__hours">{contacts.hours}<br />{contacts.weekend}</p>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: var(--z-header);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .site-header__row { display: flex; align-items: center; gap: var(--space-m); height: var(--header-h); }
+  .brand { display: flex; align-items: center; gap: var(--space-xs); text-decoration: none; flex: none; border-radius: var(--radius); }
+  .brand :global(img) { border-radius: var(--radius); }
+  .brand :global(.brand__logo--l) { display: none; }
+  .brand__desc { display: none; flex-direction: column; font-size: var(--text-caption); line-height: 1.25; color: var(--color-muted); }
+  .brand__desc span:first-child { color: var(--color-text); font-weight: 600; }
+
+  .site-nav { display: none; }
+  .site-nav ul { display: flex; gap: var(--space-m); list-style: none; }
+  .site-nav a {
+    display: inline-flex; align-items: center; min-height: var(--control-h);
+    text-decoration: none; font-size: var(--text-body); white-space: nowrap;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat; background-position: 0 calc(100% - 10px); background-size: 100% 1px;
+    background-size: 0 1px;
+    transition: background-size var(--dur-mid) var(--ease-out);
+  }
+  .site-nav a:hover, .site-nav a.is-active { background-size: 100% 1px; }
+
+  .site-header__tools { margin-left: auto; display: flex; align-items: center; gap: var(--space-2xs); }
+  .site-header__tools :global(.search-soon) { display: none; width: var(--control-h); height: var(--control-h); justify-content: center; border-radius: var(--radius); color: var(--color-muted); }
+  .site-header__tools :global(.search-soon svg) { width: 24px; height: 24px; }
+  .site-header__tools :global(.search-soon .future-link__note) { left: auto; right: 0; }
+  .phone-text { display: none; font-weight: 600; text-decoration: none; white-space: nowrap; padding: 0 var(--space-2xs); min-height: var(--control-h); align-items: center; border-radius: var(--radius); }
+  .phone-text:hover { text-decoration: underline; }
+  .hide-s { display: none; }
+
+  .req-count {
+    display: inline-flex; align-items: center; gap: var(--space-2xs);
+    min-height: 40px; padding: 0 var(--space-xs);
+    border: 1px solid var(--color-edge); border-radius: var(--radius);
+    text-decoration: none; font-weight: 600; font-size: var(--text-caption); white-space: nowrap;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .req-count[hidden] { display: none; }
+  @media (max-width: 639px) { .req-count { display: none; } }
+  .req-count:hover { border-color: var(--color-text); }
+  .req-count__n {
+    display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 var(--space-3xs);
+    border-radius: var(--radius); background: var(--color-accent); color: var(--color-accent-ink);
+  }
+  .req-count__n.is-bump { animation: bump var(--dur-fast) var(--ease-out); }
+  @keyframes bump { 50% { transform: scale(1.08); } }
+
+  .menu-btn { padding: 0 var(--space-xs); gap: var(--space-2xs); }
+
+  .mobile-menu {
+    position: fixed; inset: 0; width: 100%; height: 100dvh; max-width: none; max-height: none;
+    margin: 0; padding: 0 0 var(--space-xl); border: 0;
+    background: var(--color-bg); color: var(--color-text); overflow-y: auto;
+  }
+  .mobile-menu__head { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); border-bottom: 1px solid var(--color-rule); }
+  .mobile-menu__title { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lead); }
+  .mobile-menu__nav { list-style: none; padding: var(--space-m) 0; }
+  .mobile-menu__nav a {
+    display: block; padding: var(--space-xs) 0; text-decoration: none;
+    font-family: var(--font-display); font-weight: 700; font-size: var(--text-title); line-height: 1.2;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .mobile-menu__contacts { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2xs); }
+  .mobile-menu__contacts li:first-child { grid-column: 1 / -1; }
+  .mobile-menu__contacts .btn { width: 100%; padding: 0 var(--space-2xs); }
+  .mobile-menu__hours { margin-top: var(--space-m); color: var(--color-muted); }
+
+  @media (min-width: 640px) {
+    .brand__desc { display: flex; }
+    .phone-text { display: inline-flex; }
+    .call-s { display: none; }
+  }
+  @media (min-width: 960px) {
+    .brand :global(.brand__logo--s) { display: none; }
+    .brand :global(.brand__logo--l) { display: block; }
+  }
+  @media (min-width: 1180px) {
+    .site-nav { display: block; margin-left: var(--space-m); }
+    .site-header__tools :global(.search-soon) { display: inline-flex; }
+    .hide-s { display: inline-grid; }
+    .menu-btn { display: none; }
+    .site-header__tools { gap: var(--space-3xs); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .req-count__n.is-bump { animation: none; }
+  }
+</style>

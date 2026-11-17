@@ -1,0 +1,96 @@
+---
+import Icon from "./Icon.astro";
+import { contacts, letterFields, letterGreeting, letterEmpty, letterInvoice, letterText } from "../data/site";
+
+const mailHref = `${contacts.emailHref}?subject=${encodeURIComponent("Запит на підбір обладнання")}&body=${encodeURIComponent(letterText([]))}`;
+const checklist = [
+  "Заклад або спеціалізація",
+  "Яке обладнання потрібне",
+  "Кількість",
+  "Орієнтовний бюджет",
+  "Місто доставки",
+  "Чи потрібен рахунок на заклад",
+];
+---
+<section id="pidbir" class="pidbir on-field" aria-labelledby="pidbir-title">
+  <div class="container grid pidbir__grid">
+    <div class="pidbir__head">
+      <h2 id="pidbir-title">Запит на підбір</h2>
+      <p class="pidbir__lede">Професійно консультуємо щодо підбору обладнання. Повідомлення менеджеру вже складене: допишіть деталі й надішліть зручним способом.</p>
+    </div>
+
+    <div class="letter" data-letter>
+      <p class="letter__line letter__greet">{letterGreeting}</p>
+      <p class="letter__line">
+        <span class="letter__key">Напрями:</span>
+        <span class="letter__dirs" data-letter-dirs><span class="letter__empty">{letterEmpty}</span></span>
+      </p>
+      {letterFields.map((f) => (
+        <p class="letter__line"><span class="letter__key">{f}:</span> <span class="letter__fill" aria-label="допишіть">…</span></p>
+      ))}
+      <p class="letter__line"><span class="letter__key">{letterInvoice}</span></p>
+    </div>
+
+    <div class="pidbir__aside">
+      <h3 class="pidbir__h3">Що повідомити менеджеру</h3>
+      <ol class="checklist">
+        {checklist.map((c) => <li>{c}</li>)}
+      </ol>
+      <div class="pidbir__actions">
+        <button class="btn btn--field pidbir__copy js-only" type="button" data-copy><Icon name="copy" /><span data-copy-label>Скопіювати запит</span></button>
+        <a class="btn btn--field" href={contacts.telegram} data-copy-open><Icon name="telegram" />Відкрити Telegram</a>
+        <a class="btn btn--field" href={contacts.viber} data-copy-open><Icon name="viber" />Відкрити Viber</a>
+        <a class="btn btn--field" href={mailHref} data-mail><Icon name="mail" />Надіслати e-mail</a>
+      </div>
+      <p class="pidbir__status" role="status" aria-live="polite" data-copy-status></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pidbir { background: var(--color-field); color: var(--color-on-field); padding: var(--space-xl) 0; }
+  .pidbir__grid { row-gap: var(--space-l); }
+  .pidbir__head { grid-column: 1 / -1; display: grid; gap: var(--space-s); }
+  .pidbir__lede { color: var(--color-on-field-muted); max-width: 52ch; }
+
+  /* The letter: typed text on the navy sheet, one fact per ruled line. */
+  .letter { grid-column: 1 / -1; font-size: var(--text-body-l); line-height: 1.45; border-top: 1px solid var(--color-on-field-muted); }
+  .letter__line { padding: var(--space-xs) 0; border-bottom: 1px solid var(--color-field-rule); }
+  .letter__greet { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lead); letter-spacing: -0.01em; }
+  .letter__key { color: var(--color-on-field-muted); }
+  .letter__fill { color: var(--color-on-field-muted); }
+  .letter__dirs { color: var(--color-on-field); }
+  .letter__empty { color: var(--color-on-field-muted); font-style: normal; }
+  .letter__dirs :global(.dir) { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+  /* Motion 4: a direction added to the letter fades in. */
+  .letter__dirs :global(.dir.is-new) { animation: ink-in var(--dur-mid) var(--ease-out) both; }
+  @keyframes ink-in { from { opacity: 0; } to { opacity: 1; } }
+
+  .pidbir__aside { grid-column: 1 / -1; display: grid; gap: var(--space-m); align-content: start; }
+  .pidbir__h3 { font-family: var(--font-body); font-weight: 600; font-size: var(--text-lead); line-height: 1.3; }
+  .checklist { padding-left: var(--space-m); display: grid; gap: var(--space-3xs); color: var(--color-on-field); }
+  .checklist li::marker { color: var(--color-on-field-muted); font-variant-numeric: tabular-nums; }
+  .pidbir__actions { display: grid; gap: var(--space-2xs); }
+  .pidbir__actions .btn { padding: 0 var(--space-xs); }
+  .pidbir__copy { border-color: var(--color-on-field); }
+  @media (min-width: 480px) {
+    .pidbir__actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pidbir__copy, .pidbir__actions a:last-child { grid-column: 1 / -1; }
+  }
+  .pidbir__status { min-height: 1.55em; font-size: var(--text-caption); color: var(--color-on-field); }
+  :global(html:not(.js)) .js-only { display: none; }
+  .letter.is-selected { outline: 1px dashed var(--color-on-field-muted); outline-offset: var(--space-2xs); }
+
+  @media (min-width: 960px) {
+    .pidbir { padding: var(--space-2xl) 0; }
+    .pidbir__grid { row-gap: var(--space-xl); }
+    .pidbir__head { grid-column: 1 / span 7; }
+    .letter { grid-column: 1 / span 7; font-size: var(--text-lead); }
+    .letter__greet { font-size: var(--text-title); }
+    .letter__line { padding: var(--space-s) 0; }
+    .pidbir__aside { grid-column: 9 / span 4; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .letter__dirs :global(.dir.is-new) { animation: none; }
+  }
+</style>

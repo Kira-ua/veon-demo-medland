@@ -1,0 +1,65 @@
+---
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+---
+<section id="kontakty" class="kontakty" aria-labelledby="kontakty-title" data-rec="W-R007">
+  <div class="container">
+    <h2 id="kontakty-title">Контакти MedLand в Одесі</h2>
+    <a class="phone tnum" href={contacts.phoneHref} aria-label={`Подзвонити: ${contacts.phoneText}`}>{contacts.phoneText}</a>
+
+    <div class="kontakty__cols grid">
+      <div class="col">
+        <h3>Графік роботи</h3>
+        <p class="tnum">{contacts.hours}<br />{contacts.weekend}</p>
+        <p class="muted">У неробочий час напишіть у Telegram або на e-mail: відповімо в робочий день.</p>
+      </div>
+      <div class="col">
+        <h3>Написати</h3>
+        <ul class="channels">
+          <li><a class="channel" href={contacts.telegram}><Icon name="telegram" /><span>Telegram</span></a></li>
+          <li><a class="channel" href={contacts.viber}><Icon name="viber" /><span>Viber</span></a></li>
+          <li><a class="channel" href={contacts.emailHref}><Icon name="mail" /><span>{contacts.email}</span></a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Адреса</h3>
+        <p>{contacts.address}</p>
+        <a class="channel" href={contacts.map} target="_blank" rel="noopener"><Icon name="pin" /><span>Відкрити на карті</span><span class="visually-hidden"> (Google Maps, нова вкладка)</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kontakty { padding: var(--space-xl) 0 var(--space-2xl); }
+  .phone {
+    display: inline-block; margin-top: var(--space-m);
+    font-family: var(--font-display); font-weight: 700; font-size: var(--text-phone); line-height: 1; letter-spacing: -0.03em;
+    text-decoration: none;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-repeat: no-repeat; background-position: 0 100%; background-size: 0 3px;
+    padding-bottom: var(--space-2xs);
+    transition: background-size var(--dur-mid) var(--ease-out);
+  }
+  .phone:hover { background-size: 100% 3px; }
+  .kontakty__cols { margin-top: var(--space-l); row-gap: var(--space-l); border-top: 1px solid var(--color-text); padding-top: var(--space-m); }
+  .col { grid-column: 1 / -1; display: grid; gap: var(--space-2xs); align-content: start; }
+  .col h3 { font-family: var(--font-body); font-weight: 600; font-size: var(--text-body); color: var(--color-muted); line-height: 1.4; }
+  .col p { max-width: 36ch; }
+  .muted { color: var(--color-muted); font-size: var(--text-body); }
+  .channels { list-style: none; display: grid; }
+  .channel {
+    display: inline-flex; align-items: center; gap: var(--space-xs); min-height: var(--control-h);
+    text-decoration: underline; text-decoration-color: var(--color-edge); text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+  }
+  .channel:hover { text-decoration-color: currentColor; }
+  .channel :global(svg) { width: 24px; height: 24px; flex: none; }
+
+  @media (min-width: 960px) {
+    .kontakty { padding: var(--space-3xl) 0; }
+    .col { grid-column: span 4; }
+    .kontakty__cols { margin-top: var(--space-xl); }
+  }
+  @media (prefers-reduced-motion: reduce) { .phone { transition: none; } }
+</style>

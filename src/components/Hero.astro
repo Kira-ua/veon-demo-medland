@@ -1,0 +1,154 @@
+---
+import { Picture } from "astro:assets";
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+import shvl from "../assets/shelf/shvl-foras-t19.png";
+import defib from "../assets/shelf/defibrylator-s6.png";
+import monitor from "../assets/shelf/monitor-pm6100.png";
+import narkoz from "../assets/shelf/narkoz-biomed-ax700.png";
+import bili from "../assets/shelf/bilirubinometr-bm100a.png";
+import ekg from "../assets/shelf/ekg-heaco-300g.png";
+
+// h = share of the shelf height, so the devices keep a believable relative size on one baseline.
+const shelf = [
+  { img: shvl, name: "Апарат ШВЛ Foras DEM T-19", alt: "Апарат штучної вентиляції легень Foras DEM T-19 на стійці", h: 1, dir: "Реанімація", href: "#napryam-reanimatsiya" },
+  { img: defib, name: "Дефібрилятор-монітор S6", alt: "Дефібрилятор-монітор S6", h: 0.6, dir: "Реанімація", href: "#napryam-reanimatsiya" },
+  { img: ekg, name: "Електрокардіограф Heaco 300G", alt: "Електрокардіограф Heaco 300G", h: 0.4, dir: "Кардіологія", href: "#napryam-kardiolohiya" },
+  { img: narkoz, name: "Апарат наркозно-дихальний БІОМЕД AX-700", alt: "Апарат наркозно-дихальний БІОМЕД AX-700", h: 1, dir: "Реанімація", href: "#napryam-reanimatsiya" },
+  { img: monitor, name: "Монітор пацієнта РМ6100", alt: "Монітор пацієнта РМ6100", h: 0.56, dir: "Реанімація", href: "#napryam-reanimatsiya" },
+  { img: bili, name: "Білірубінометр BM-100A", alt: "Білірубінометр BM-100A у док-станції", h: 0.5, dir: "Реанімація", href: "#napryam-reanimatsiya" },
+];
+---
+<section id="hero" class="hero" aria-labelledby="hero-title">
+  <div class="container hero__top grid">
+    <h1 id="hero-title" class="hero__title" data-rec="S2-R002">
+      <span class="line">Медичне обладнання</span>
+      <span class="line">для лікарень, клінік</span>
+      <span class="line">і&nbsp;медичних центрів</span>
+    </h1>
+    <div class="hero__aside" data-rec="W-R004,W-R007,G-R006,G-R007,MA-R004,MA-R005">
+      <p class="hero__lede">Підбір моделі, рахунок для закладу, доставка Новою поштою по Україні.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary hero__call" href={contacts.phoneHref}><Icon name="phone" />Подзвонити менеджеру</a>
+        <div class="hero__msg">
+          <a class="btn" href={contacts.telegram}><Icon name="telegram" />Telegram</a>
+          <a class="btn" href={contacts.viber}><Icon name="viber" />Viber</a>
+        </div>
+      </div>
+      <p class="hero__hours"><span class="tnum">{contacts.hours}</span><span>{contacts.city}</span></p>
+    </div>
+  </div>
+
+  <div class="container">
+    <ul class="shelf" aria-label="Обладнання з каталогу MedLand" tabindex="0" data-rec="W-R001" data-reveal="desktop" style="--reveal-delay:180ms">
+      {shelf.map((p, i) => (
+        <li class="shelf__item" style={`--h:${p.h}`}>
+          <figure>
+            <div class="shelf__img">
+              <Picture
+                src={p.img}
+                alt={p.alt}
+                formats={["avif", "webp"]}
+                fallbackFormat="webp"
+                widths={[Math.round(p.img.width / 2), p.img.width]}
+                sizes={`${Math.round(p.img.width / 2)}px`}
+                loading={i === 0 ? "eager" : "lazy"}
+                fetchpriority={i === 0 ? "high" : "auto"}
+                decoding={i === 0 ? "sync" : "async"}
+              />
+            </div>
+            <figcaption>
+              <span class="shelf__name">{p.name}</span>
+              <a class="shelf__dir link" href={p.href}>{p.dir}</a>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero { padding-top: var(--space-m); }
+  .hero__top { row-gap: var(--space-m); }
+  .hero__title {
+    grid-column: 1 / -1;
+    font-size: var(--text-hero); line-height: 1.02; letter-spacing: -0.02em;
+  }
+  .line { display: inline; }
+  .line + .line::before { content: " "; }
+  @media (min-width: 960px) { .line { display: block; } .line + .line::before { content: none; } }
+  .hero__aside { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--space-m); }
+  .hero__lede { font-size: var(--text-body-l); line-height: 1.45; max-width: 34ch; }
+  .hero__actions { display: grid; gap: var(--space-2xs); }
+  .hero__call { width: 100%; }
+  .hero__msg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2xs); }
+  .hero__hours { display: flex; flex-wrap: wrap; column-gap: var(--space-m); color: var(--color-muted); font-size: var(--text-caption); margin-top: calc(-1 * var(--space-2xs)); }
+
+  /* Shelf: devices stand on one baseline; white photo backgrounds melt into the paper (multiply). */
+  .shelf {
+    --shelf-h: 200px;
+    list-style: none; display: flex; gap: var(--space-m);
+    margin-top: var(--space-xl);
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--space)); padding-inline: var(--space);
+    scroll-padding-inline: var(--space);
+  }
+  .shelf::-webkit-scrollbar { display: none; }
+  .shelf__item { flex: 0 0 68%; scroll-snap-align: start; min-width: 0; }
+  .shelf figure { display: flex; flex-direction: column; height: 100%; }
+  .shelf__img {
+    height: var(--shelf-h); display: flex; align-items: flex-end;
+    border-bottom: 1px solid var(--color-text);
+  }
+  .shelf__img :global(picture) { display: contents; }
+  .shelf__img :global(img) {
+    height: calc(var(--shelf-h) * var(--h)); width: auto; max-width: 100%;
+    object-fit: contain; object-position: left bottom;
+    mix-blend-mode: multiply;
+  }
+  .shelf figcaption { display: flex; flex-direction: column; gap: var(--space-3xs); padding-top: var(--space-xs); padding-right: var(--space-s); font-size: var(--text-caption); line-height: 1.35; }
+  .shelf__name { color: var(--color-text); }
+  .shelf__dir { color: var(--color-muted); align-self: flex-start; }
+  .shelf__dir:hover { color: var(--color-text); }
+
+  @media (min-width: 640px) {
+    .shelf__item { flex-basis: 40%; }
+    .hero__aside { grid-column: 1 / span 3; }
+  }
+
+  @media (min-width: 960px) {
+    .hero { padding-top: var(--space-xl); }
+    .hero__aside { grid-column: 1 / span 6; }
+  }
+  @media (min-width: 1180px) {
+    .hero__top { align-items: end; }
+    .hero__title { grid-column: 1 / span 8; }
+    .hero__aside { grid-column: 9 / span 4; gap: var(--space-s); }
+    .hero__lede { font-size: var(--text-lead); }
+    .hero__hours { margin-top: 0; }
+  }
+  @media (min-width: 960px) {
+    .shelf {
+      --shelf-h: clamp(200px, 21vw, 300px);
+      display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0;
+      overflow: visible; margin-inline: 0; padding-inline: 0;
+      margin-top: var(--space-l);
+    }
+    .shelf__img { padding-right: var(--space-m); }
+  }
+
+  /* Motion 1: the first screen settles. Lines shift 8px (no opacity, LCP does not wait); the shelf fades in on wide screens only. */
+  :global(.js) .hero__title { animation: settle var(--dur-hero) var(--ease-out) both; }
+  @media (min-width: 960px) {
+    :global(.js) .hero__title { animation: none; }
+    :global(.js) .hero__title .line { animation: settle var(--dur-hero) var(--ease-out) both; }
+    :global(.js) .hero__title .line:nth-child(2) { animation-delay: 60ms; }
+    :global(.js) .hero__title .line:nth-child(3) { animation-delay: 120ms; }
+  }
+  @keyframes settle { from { transform: translateY(8px); } to { transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .hero__title, :global(.js) .hero__title .line { animation: none; }
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+---
+<div class="mbar" data-mbar data-rec="W-R004,W-R007">
+  <a class="btn btn--primary mbar__call" href={contacts.phoneHref}><Icon name="phone" class="mbar__call-icon" />Подзвонити</a>
+  <a class="icon-btn mbar__icon" href={contacts.telegram} aria-label="Написати в Telegram"><Icon name="telegram" /></a>
+  <a class="icon-btn mbar__icon" href={contacts.viber} aria-label="Написати у Viber"><Icon name="viber" /></a>
+  <a class="mbar__req" href="#pidbir" data-req-count hidden aria-label="Запит на підбір, кількість напрямів"><span class="mbar__req-word">Запит</span><span class="mbar__n tnum" data-req-n>0</span></a>
+</div>
+
+<style>
+  .mbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-bar);
+    display: flex; align-items: center; gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-s) calc(var(--space-2xs) + env(safe-area-inset-bottom));
+    background: var(--color-bg); border-top: 1px solid var(--color-rule);
+    transition: transform var(--dur-mid) var(--ease-out), visibility 0s linear 0s;
+  }
+  .mbar__call { flex: 1 1 0; min-width: 0; min-height: var(--control-h); padding: 0 var(--space-xs); }
+  .mbar__icon { flex: none; border-color: var(--color-edge); }
+  .mbar__req {
+    flex: none; display: inline-flex; align-items: center; gap: var(--space-2xs);
+    min-height: var(--control-h); padding: 0 var(--space-xs);
+    border: 1px solid var(--color-edge); border-radius: var(--radius);
+    text-decoration: none; font-weight: 600; font-size: var(--text-caption);
+  }
+  .mbar__req[hidden] { display: none; }
+  @media (max-width: 419px) {
+    .mbar { padding-inline: var(--space-xs); }
+    .mbar__req { padding: 0 var(--space-xs); }
+    .mbar__req-word { display: none; }
+  }
+  @media (max-width: 359px) { .mbar :global(.mbar__call-icon) { display: none; } }
+  .mbar__n {
+    display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 var(--space-3xs);
+    border-radius: var(--radius); background: var(--color-accent); color: var(--color-accent-ink);
+  }
+  .mbar__n.is-bump { animation: bump var(--dur-fast) var(--ease-out); }
+  @keyframes bump { 50% { transform: scale(1.08); } }
+  @media (min-width: 960px) { .mbar { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .mbar { transition: none; }
+    .mbar__n.is-bump { animation: none; }
+  }
+</style>

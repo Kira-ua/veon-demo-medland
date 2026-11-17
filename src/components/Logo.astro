@@ -1,0 +1,9 @@
+---
+// Original client logo file (content/images/source/medland-logo.png, 158x110 on #0F1E37). Not redrawn.
+import { Image } from "astro:assets";
+import logo from "../assets/medland-logo.png";
+interface Props { height?: number; class?: string; }
+const { height = 48, class: cls } = Astro.props;
+const width = Math.round((158 / 110) * height);
+---
+<Image src={logo} alt="MedLand" width={width} height={height} densities={[1, 2]} format="png" loading="eager" class={cls} />

@@ -1,0 +1,151 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { directions, moreDirections, brands, contacts } from "../data/site";
+---
+<section id="napryamy" class="napryamy" aria-labelledby="napryamy-title" data-rec="W-R009">
+  <div class="container">
+    <div class="napryamy__head grid">
+      <h2 id="napryamy-title">Напрями обладнання</h2>
+      <p class="napryamy__lede">Відмітьте плюсом потрібні напрями: вони одразу з’являться у вашому запиті менеджеру.</p>
+    </div>
+
+    <ul class="index" data-index>
+      {directions.map((d, i) => (
+        <li class="index__row" id={d.id} data-reveal style={`--reveal-delay:${i * 40}ms`}>
+          <h3 class="index__name"><FutureLink>{d.name.replace("відеоларингоскопи", "відео­ларингоскопи")}</FutureLink></h3>
+          <p class="index__examples">{d.examples}</p>
+          <button
+            class="plus"
+            type="button"
+            aria-pressed="false"
+            data-dir={d.name}
+            aria-label={`Додати до запиту: ${d.name}`}
+          >
+            <span class="plus__icon plus__icon--add"><Icon name="plus" /></span>
+            <span class="plus__icon plus__icon--on"><Icon name="check" /></span>
+            <span class="plus__state" aria-hidden="true">У запиті</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+
+    <div class="more grid">
+      <h3 class="more__title">Також у каталозі</h3>
+      <ul class="more__list">
+        {moreDirections.map((m) => <li><FutureLink>{m}</FutureLink></li>)}
+      </ul>
+      <p class="more__brands">
+        <span class="more__label">Бренди в каталозі:</span>
+        {brands.map((b) => <FutureLink class="brand-soon">{b}</FutureLink>)}
+      </p>
+    </div>
+
+    <div class="notfound">
+      <p class="notfound__text">Не знайшли потрібне? Менеджер підбере модель.</p>
+      <div class="notfound__actions">
+        <a class="btn" href={contacts.phoneHref}><Icon name="phone" />Подзвонити</a>
+        <a class="btn" href={contacts.telegram}><Icon name="telegram" />Написати в Telegram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .napryamy { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
+  .napryamy__head { row-gap: var(--space-s); align-items: end; margin-bottom: var(--space-l); }
+  .napryamy__head h2 { grid-column: 1 / -1; text-wrap: balance; }
+  .napryamy__lede { grid-column: 1 / -1; color: var(--color-muted); max-width: 44ch; }
+
+  /* Index rows: name, examples, plus. Hairlines, no cards. */
+  .index { list-style: none; border-top: 1px solid var(--color-text); }
+  .index__row {
+    position: relative;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-s); row-gap: var(--space-2xs);
+    align-items: center;
+    padding: var(--space-m) 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  /* red edge of a chosen row (motion 2: scaleY) */
+  .index__row::before {
+    content: ""; position: absolute; left: calc(-1 * var(--space-xs)); top: var(--space-xs); bottom: var(--space-xs); width: 3px;
+    background: var(--color-accent); transform: scaleY(0); transform-origin: 50% 50%;
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+  .index__row.is-on::before { transform: scaleY(1); }
+  .index__name { grid-column: 1; font-family: var(--font-display); font-size: clamp(1.375rem, 0.25rem + 6.4vw, var(--text-title)); line-height: 1.1; letter-spacing: -0.015em; }
+  .index__name :global(.future-link) { display: inline; }
+  .index__examples { grid-column: 1; grid-row: 2; color: var(--color-muted); font-size: var(--text-body); max-width: 52ch; }
+  .index__examples:empty { display: none; }
+  .plus { grid-column: 2; grid-row: 1 / span 2; }
+
+  .plus {
+    position: relative; display: inline-flex; align-items: center; gap: var(--space-xs);
+    min-height: var(--control-h); padding: 0; border: 0; background: none; cursor: pointer;
+    color: var(--color-text);
+  }
+  .plus__icon {
+    display: grid; place-items: center; width: var(--control-h); height: var(--control-h);
+    border: 1px solid var(--color-edge); border-radius: var(--radius);
+    transition: opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out), background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .plus__icon :global(svg) { width: 24px; height: 24px; }
+  .plus__icon--on {
+    position: absolute; right: 0; top: 0;
+    background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink);
+  }
+  .plus[aria-pressed="false"] .plus__icon--on { opacity: 0; transform: rotate(-45deg) scale(.8); }
+  .plus__state { display: none; position: absolute; right: calc(100% + var(--space-xs)); top: 50%; transform: translateY(-50%); font-size: var(--text-caption); font-weight: 600; color: var(--color-accent); transition: opacity var(--dur-mid) var(--ease-out); white-space: nowrap; }
+  .plus[aria-pressed="false"] .plus__state { opacity: 0; }
+  @media (min-width: 960px) { .plus__state { display: block; } }
+  .plus:hover .plus__icon--add { background: var(--color-paper-hover); border-color: var(--color-text); }
+  .plus:active .plus__icon { transform: translateY(1px); }
+  .plus:focus-visible { outline: none; }
+  .plus:focus-visible .plus__icon--add, .plus:focus-visible .plus__icon--on { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+  .plus[aria-pressed="true"] .plus__icon--add { opacity: 0; transform: rotate(45deg) scale(.8); }
+  .plus[aria-pressed="true"]:hover .plus__icon--on { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+  /* Without scripting the plus cannot add anything: hide it, the index stays a readable list. */
+  :global(html:not(.js)) .plus { display: none; }
+
+  .more { margin-top: var(--space-xl); row-gap: var(--space-m); }
+  .more__title { grid-column: 1 / -1; font-family: var(--font-display); font-size: var(--text-lead); line-height: 1.2; }
+  .more__list { grid-column: 1 / -1; list-style: none; columns: 2; column-gap: var(--gutter); }
+  .more__list li { break-inside: avoid; padding: var(--space-3xs) 0; }
+  .more__list :global(.future-link) { color: var(--color-text); }
+  .more__brands { grid-column: 1 / -1; display: flex; flex-wrap: wrap; column-gap: var(--space-s); row-gap: var(--space-3xs); color: var(--color-muted); }
+  .more__label { color: var(--color-text); }
+
+  .notfound {
+    margin-top: var(--space-xl); padding-top: var(--space-m);
+    border-top: 1px solid var(--color-text);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-m);
+  }
+  .notfound__text { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lead); line-height: 1.2; letter-spacing: -0.01em; }
+  .notfound__actions { display: flex; flex-wrap: wrap; gap: var(--space-2xs); }
+
+  @media (min-width: 640px) {
+    .more__list { columns: 3; }
+  }
+  @media (min-width: 960px) {
+    .napryamy { padding-top: var(--space-3xl); padding-bottom: var(--space-2xl); }
+    .napryamy__head { margin-bottom: var(--space-xl); }
+    .napryamy__head h2 { grid-column: 1 / span 6; }
+    .napryamy__lede { grid-column: 8 / span 5; }
+    .index__row {
+      grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter);
+      padding: var(--space-m) 0;
+    }
+    .index__row::before { left: calc(-1 * var(--space-m)); }
+    .index__name { grid-column: 1 / span 6; font-size: var(--text-section); }
+    .index__examples { grid-column: 7 / span 4; grid-row: 1; }
+    .plus { grid-column: 11 / span 2; grid-row: 1; justify-self: end; }
+    .more__title { grid-column: 1 / span 4; font-size: var(--text-title); }
+    .more__list { grid-column: 5 / span 8; columns: 2; }
+    .more__brands { grid-column: 5 / span 8; margin-top: var(--space-s); }
+    .notfound__text { font-size: var(--text-title); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .index__row::before, .plus__icon, .plus__state { transition: none; }
+    .plus:active .plus__icon { transform: none; }
+  }
+</style>

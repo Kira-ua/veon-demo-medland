@@ -1,0 +1,112 @@
+/* Base (from demo-base) + MedLand shared styles. Every colour, font and spacing goes through tokens.css. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.55;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 960px) { body { font-size: var(--text-body-l); } }
+::selection { background: var(--color-field); color: var(--color-on-field); }
+html { scrollbar-color: var(--color-edge) var(--color-bg); }
+img, video, svg { display: block; max-width: 100%; height: auto; }
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; }
+ul, ol { padding: 0; }
+h1, h2, h3 { overflow-wrap: break-word; min-width: 0; text-wrap: balance; font-weight: 700; }
+h1, h2 { font-family: var(--font-display); letter-spacing: -0.02em; }
+h2 { font-size: var(--text-title); line-height: 1.1; }
+@media (min-width: 960px) { h2 { font-size: var(--text-section); line-height: 1.05; } }
+p { text-wrap: pretty; }
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.on-field :focus-visible { outline-color: var(--color-on-field); }
+.skip-link {
+  position: absolute; left: var(--space-s); top: -100px; z-index: 100;
+  padding: var(--space-xs) var(--space-s);
+  background: var(--color-text); color: var(--color-bg); border-radius: var(--radius);
+}
+.skip-link:focus { top: var(--space-s); }
+.container { width: min(100% - 2 * var(--space), var(--container)); margin-inline: auto; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.tnum { font-variant-numeric: tabular-nums; }
+.nowrap { white-space: nowrap; }
+
+/* 12-column grid helper */
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gutter); }
+@media (min-width: 960px) { .grid { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+
+/* Buttons: primary (red, one per screen), secondary (outline), on-field variants */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2xs);
+  min-height: var(--control-h); padding: 0 var(--space-m);
+  border: 1px solid var(--color-edge); border-radius: var(--radius);
+  background: transparent; color: var(--color-text);
+  font-family: var(--font-body); font-weight: 600; font-size: var(--text-body); line-height: 1.2;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.btn svg { width: 24px; height: 24px; flex: none; }
+.btn:hover { background: var(--color-paper-hover); border-color: var(--color-text); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+.btn--primary { min-height: var(--control-h-l); background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
+.btn--primary:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+.btn--field { border-color: var(--color-on-field-muted); color: var(--color-on-field); }
+.btn--field:hover { background: var(--color-field-hover); border-color: var(--color-on-field); }
+.btn--field:focus-visible { outline-color: var(--color-on-field); }
+
+/* Icon-only control, 48 x 48 */
+.icon-btn {
+  display: inline-grid; place-items: center; width: var(--control-h); height: var(--control-h);
+  border-radius: var(--radius); color: inherit; text-decoration: none; cursor: pointer;
+  background: transparent; border: 1px solid transparent;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.icon-btn svg { width: 24px; height: 24px; }
+.icon-btn:hover { background: var(--color-paper-hover); border-color: var(--color-rule); }
+.icon-btn:active { transform: translateY(1px); }
+
+/* Text link with underline */
+.link { text-decoration: underline; text-decoration-color: var(--color-edge); transition: text-decoration-color var(--dur-fast) var(--ease-out); }
+.link:hover { text-decoration-color: currentColor; }
+
+/* Reveal-on-scroll hook (src/scripts/reveal.ts). Hidden only once scripting runs (.js on <html>). */
+[data-reveal] { transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out); transition-delay: var(--reveal-delay, 0ms); }
+.js [data-reveal]:not(.is-visible) { opacity: 0; transform: translateY(12px); }
+
+/* Mobile contact bar (MobileBar.astro): hidden on the first screen only when scripting runs; without JS it simply stays. */
+.js .mbar:not(.is-shown) { transform: translateY(110%); visibility: hidden; transition: transform var(--dur-mid) var(--ease-out), visibility 0s linear var(--dur-mid); }
+
+/* Anchor targets stay visible under the sticky header. */
+[id] { scroll-margin-top: calc(var(--header-h) + var(--space-s)); }
+
+/* FutureLink: a page that is not built yet. Looks like part of the design, not like an error. */
+.future-link { position: relative; display: inline-flex; align-items: center; cursor: default; text-decoration: none; }
+.future-link__note[aria-hidden="true"] {
+  position: absolute; left: 0; top: calc(100% + var(--space-3xs));
+  white-space: nowrap; padding: var(--space-3xs) var(--space-2xs);
+  font-family: var(--font-body); font-weight: 400; font-size: var(--text-caption); line-height: 1.3; letter-spacing: 0;
+  background: var(--color-text); color: var(--color-bg); border-radius: var(--radius);
+  opacity: 0; pointer-events: none; transform: translateY(-4px);
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+  z-index: 20;
+}
+.future-link:hover .future-link__note { opacity: 1; transform: translateY(0); transition-delay: 250ms; }
+.future-link:focus-visible .future-link__note { opacity: 1; transform: translateY(0); transition-delay: 0ms; }
+.on-field .future-link__note[aria-hidden="true"] { background: var(--color-on-field); color: var(--color-field); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+  .js [data-reveal]:not(.is-visible) { opacity: 1; transform: none; }
+  .js .mbar:not(.is-shown) { transition: none; }
+  .btn:active, .icon-btn:active { transform: none; }
+}

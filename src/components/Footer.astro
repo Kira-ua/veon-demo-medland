@@ -1,0 +1,77 @@
+---
+import Logo from "./Logo.astro";
+import FutureLink from "./FutureLink.astro";
+import { contacts } from "../data/site";
+const anchors = [
+  { href: "#napryamy", label: "Каталог" },
+  { href: "#pidbir", label: "Підбір" },
+  { href: "#umovy", label: "Оплата і доставка" },
+  { href: "#kontakty", label: "Контакти" },
+];
+const future = ["Про компанію", "Доставка та оплата", "Повернення та обмін", "Правова інформація"];
+---
+<footer class="site-footer on-field">
+  <div class="container grid site-footer__grid">
+    <div class="f-brand">
+      <a href="#top" class="f-logo" aria-label="MedLand: на початок сторінки"><Logo height={56} /></a>
+      <p>Інтернет-магазин медичного обладнання для лікарень, клінік і медичних центрів.</p>
+    </div>
+    <nav class="f-col f-col--nav" aria-label="Розділи сторінки">
+      <p class="f-title">Розділи</p>
+      <ul>{anchors.map((a) => <li><a href={a.href}>{a.label}</a></li>)}</ul>
+    </nav>
+    <div class="f-col f-col--info">
+      <p class="f-title">Інформація</p>
+      <ul>{future.map((f) => <li><FutureLink>{f}</FutureLink></li>)}</ul>
+    </div>
+    <div class="f-col f-col--contact">
+      <p class="f-title">Зв’язок</p>
+      <ul>
+        <li><a class="tnum" href={contacts.phoneHref}>{contacts.phoneText}</a></li>
+        <li><a href={contacts.telegram}>Telegram</a></li>
+        <li><a href={contacts.viber}>Viber</a></li>
+        <li><a href={contacts.emailHref}>{contacts.email}</a></li>
+        <li><a href={contacts.map} target="_blank" rel="noopener">{contacts.address}<span class="visually-hidden"> (карта, нова вкладка)</span></a></li>
+      </ul>
+    </div>
+    <div class="f-bottom">
+      <p>Оплата: картка ПриватБанку, картка monobank, рахунок ФОП.</p>
+      <p>© Інтернет-магазин MedLand</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--color-field); color: var(--color-on-field); padding: var(--space-xl) 0 calc(var(--space-l) + var(--bar-h)); font-size: var(--text-body); }
+  .site-footer__grid { row-gap: var(--space-l); }
+  .f-brand { grid-column: 1 / -1; display: grid; gap: var(--space-s); align-content: start; }
+  .f-brand p { color: var(--color-on-field-muted); max-width: 36ch; }
+  .f-logo { justify-self: start; border-radius: var(--radius); }
+  .f-col { grid-column: 1 / -1; }
+  .f-title { font-family: var(--font-body); font-weight: 600; font-size: var(--text-body); letter-spacing: 0; color: var(--color-on-field-muted); margin-bottom: var(--space-2xs); }
+  .f-col ul { list-style: none; display: grid; }
+  .f-col li { min-height: 40px; display: flex; align-items: center; }
+  .f-col a { text-decoration: underline; text-decoration-color: var(--color-on-field-muted); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+  .f-col a:hover { text-decoration-color: currentColor; }
+  .f-col :global(.future-link) { color: var(--color-on-field); }
+  .f-bottom { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-xs); padding-top: var(--space-m); border-top: 1px solid var(--color-field-rule); color: var(--color-on-field-muted); font-size: var(--text-caption); }
+
+  @media (min-width: 640px) {
+    .f-col { grid-column: span 2; }
+    .f-col--contact { grid-column: 1 / -1; }
+  }
+  @media (min-width: 960px) {
+    .site-footer { padding: var(--space-xl) 0 var(--space-l); }
+    .f-brand { grid-column: 1 / -1; }
+    .f-col--nav { grid-column: 1 / span 4; }
+    .f-col--info { grid-column: 5 / span 4; }
+    .f-col--contact { grid-column: 9 / span 4; }
+    .f-col--nav a, .f-col--info :global(.future-link) { white-space: nowrap; }
+  }
+  @media (min-width: 1180px) {
+    .f-brand { grid-column: 1 / span 4; }
+    .f-col--nav { grid-column: 6 / span 2; }
+    .f-col--info { grid-column: 8 / span 2; }
+    .f-col--contact { grid-column: 10 / span 3; }
+  }
+</style>

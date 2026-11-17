@@ -1,0 +1,71 @@
+---
+import FutureLink from "./FutureLink.astro";
+---
+<section id="umovy" class="umovy" aria-labelledby="umovy-title">
+  <div class="container">
+    <h2 id="umovy-title" class="umovy__title">Оплата, доставка, гарантія</h2>
+    <dl class="terms">
+      <div class="terms__row grid">
+        <dt>Оплата</dt>
+        <dd>
+          <p>Карткою ПриватБанку або monobank, а також <strong>на рахунок ФОП</strong> для закладів.</p>
+          <p>Повна передоплата або <strong>післяплата для замовлень до&nbsp;20&nbsp;000&nbsp;грн</strong>.</p>
+        </dd>
+      </div>
+      <div class="terms__row grid">
+        <dt>Доставка</dt>
+        <dd>
+          <p>Новою поштою в будь-яке місто чи відділення України.</p>
+          <p class="muted">На непідконтрольні території тимчасово не доставляємо.</p>
+        </dd>
+      </div>
+      <div class="terms__row grid">
+        <dt>Гарантія</dt>
+        <dd>
+          <p>Гарантійне обслуговування всієї техніки. Термін гарантії вказаний у картці товару.</p>
+        </dd>
+      </div>
+      <div class="terms__row grid">
+        <dt>Як замовити</dt>
+        <dd>
+          <ol class="steps">
+            <li>Оберіть обладнання.</li>
+            <li>Узгодьте деталі з менеджером.</li>
+            <li>Оплатіть і отримайте замовлення.</li>
+          </ol>
+        </dd>
+      </div>
+    </dl>
+    <p class="umovy__more grid">
+      <span class="umovy__links">
+        <FutureLink>Доставка та оплата</FutureLink>
+        <FutureLink>Повернення та обмін</FutureLink>
+      </span>
+    </p>
+  </div>
+</section>
+
+<style>
+  .umovy { background: var(--color-well); padding: var(--space-xl) 0; }
+  .umovy__title { margin-bottom: var(--space-l); }
+  .terms { border-top: 1px solid var(--color-text); }
+  .terms__row { row-gap: var(--space-2xs); padding: var(--space-m) 0; border-bottom: 1px solid var(--color-rule); }
+  .terms dt { grid-column: 1 / -1; font-family: var(--font-display); font-weight: 700; font-size: var(--text-lead); line-height: 1.2; }
+  .terms dd { grid-column: 1 / -1; display: grid; gap: var(--space-2xs); max-width: 62ch; }
+  .terms strong { font-weight: 600; }
+  .muted { color: var(--color-muted); }
+  .steps { padding-left: var(--space-m); display: grid; gap: var(--space-3xs); }
+  .steps li::marker { font-variant-numeric: tabular-nums; color: var(--color-muted); }
+  .umovy__more { margin-top: var(--space-m); }
+  .umovy__links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--space-m); }
+  .umovy__links :global(.future-link) { text-decoration: underline; text-decoration-color: var(--color-edge); text-underline-offset: 0.2em; }
+
+  @media (min-width: 960px) {
+    .umovy { padding: var(--space-2xl) 0; }
+    .umovy__title { margin-bottom: var(--space-xl); }
+    .terms__row { padding: var(--space-l) 0; }
+    .terms dt { grid-column: 1 / span 4; font-size: var(--text-title); }
+    .terms dd { grid-column: 5 / span 8; font-size: var(--text-lead); line-height: 1.5; }
+    .umovy__links { grid-column: 5 / span 8; }
+  }
+</style>
