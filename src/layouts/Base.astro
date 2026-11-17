@@ -23,7 +23,7 @@ const { lang, title, description, canonical, jsonLd } = Astro.props;
     <meta property="og:description" content={description} />
     <meta name="theme-color" content="#F4F6F9" />
     <meta name="robots" content="noindex" />
-    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + "/"}favicon.png`} type="image/png" />
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <slot name="head" />
